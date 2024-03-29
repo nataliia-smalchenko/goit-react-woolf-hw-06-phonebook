@@ -5,8 +5,8 @@ import { deleteContact } from 'store/contactsSlice/slice';
 import { getContacts, getFilter } from 'store/selectors';
 
 const ContactList = () => {
-  const { contacts } = useSelector(getContacts);
-  const { filter } = useSelector(getFilter);
+  const contacts = useSelector(getContacts);
+  const filter = useSelector(getFilter);
   const dispatch = useDispatch();
 
   function filterContacts() {

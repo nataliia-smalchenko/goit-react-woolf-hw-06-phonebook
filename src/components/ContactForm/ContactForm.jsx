@@ -7,7 +7,7 @@ import { getContacts } from 'store/selectors';
 
 const ContactForm = () => {
   const dispatch = useDispatch();
-  const { contacts } = useSelector(getContacts);
+  const contacts = useSelector(getContacts);
 
   const isNameExist = name => {
     if (!contacts) {
