@@ -3,10 +3,11 @@ import Button from '../Button/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'store/contactsSlice/slice';
 import { nanoid } from '@reduxjs/toolkit';
+import { getContacts } from 'store/selectors';
 
 const ContactForm = () => {
   const dispatch = useDispatch();
-  const { contacts } = useSelector(state => state.contacts);
+  const { contacts } = useSelector(getContacts);
 
   const isNameExist = name => {
     if (!contacts) {
