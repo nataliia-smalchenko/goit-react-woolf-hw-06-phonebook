@@ -1,10 +1,24 @@
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '../Button/Button';
-import css from './ContsctList.module.css';
+import css from './ContactList.module.css';
+import { deleteContact } from 'store/contactsSlice/slice';
 
-const ContactList = props => {
+const ContactList = () => {
+  const { contacts } = useSelector(state => state.contacts);
+  const { filter } = useSelector(state => state.filter);
+  const dispatch = useDispatch();
+
+  function filterContacts() {
+    return contacts.filter(contact => {
+      return contact.name.toLowerCase().includes(filter.toLowerCase());
+    });
+  }
+
+  const filteredContacts = filterContacts();
+
   return (
     <ul className={css.list}>
-      {props.list.map(item => {
+      {filteredContacts.map(item => {
         return (
           <li className={css.item} key={item.id}>
             <span className={css['item-text']}>
@@ -13,7 +27,9 @@ const ContactList = props => {
             <Button
               type="button"
               text="Delete"
-              handleClick={() => props.onClick(item.id)}
+              handleClick={() => {
+                dispatch(deleteContact(item.id));
+              }}
             />
           </li>
         );

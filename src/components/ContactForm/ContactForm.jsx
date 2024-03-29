@@ -1,29 +1,42 @@
 import Input from '../Input/Input';
 import Button from '../Button/Button';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'store/contactsSlice/slice';
+import { nanoid } from '@reduxjs/toolkit';
 
-const ContactForm = props => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+const ContactForm = () => {
+  const dispatch = useDispatch();
+  const { contacts } = useSelector(state => state.contacts);
 
-  const handleChange = e => {
-    if (e.target.id === 'name') {
-      setName(e.target.value);
+  const isNameExist = name => {
+    if (!contacts) {
+      return false;
     }
-    if (e.target.id === 'number') {
-      setNumber(e.target.value);
-    }
+    return contacts.find(contact => contact.name === name);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (props.isNameExist(name)) {
+    const target = e.target;
+    const name = target.elements.name.value;
+
+    if (isNameExist(name)) {
       alert(`${name} is already in contacts`);
       return;
     }
-    props.onSubmit({ name, number });
-    setName('');
-    setNumber('');
+
+    const number = target.elements.number.value;
+
+    dispatch(
+      addContact({
+        id: nanoid(),
+        name,
+        number,
+      })
+    );
+
+    target.elements.name.value = '';
+    target.elements.number.value = '';
   };
 
   return (
@@ -33,20 +46,16 @@ const ContactForm = props => {
         id="name"
         pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
         title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-        value={name}
         label="Name"
-        onChange={handleChange}
       />
       <Input
         type="tel"
         id="number"
         pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
         title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-        value={number}
         label="Number"
-        onChange={handleChange}
       />
-      <Button type="submit" onClick={() => {}} text="add contact" />
+      <Button type="submit" text="add contact" />
     </form>
   );
 };

@@ -12,7 +12,6 @@ const Input = props => {
         id={props.id}
         pattern={props.pattern}
         title={props.title}
-        value={props.value}
         onChange={props.onChange}
         required
       />
